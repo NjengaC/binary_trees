@@ -9,15 +9,17 @@
  */
 int binary_tree_is_complete(const binary_tree_t *tree)
 {
+	if (tree == NULL)
+		return (0);
+
 	int is_last_level = 0;
 	const binary_tree_t *current;
-	const binary_tree_t **queue;
+	const binary_tree_t **queue = NULL;
 	int front = 0, rear = 0;
+	int size = 1024;
 
-	queue = malloc(sizeof(binary_tree_t *) * 1024);
+	queue = malloc(sizeof(binary_tree_t *) * size);
 	if (queue == NULL)
-		return (0);
-	if (tree == NULL)
 		return (0);
 
 	queue[rear++] = tree;
@@ -43,4 +45,3 @@ int binary_tree_is_complete(const binary_tree_t *tree)
 
 	return (1);
 }
-

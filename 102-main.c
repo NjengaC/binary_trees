@@ -31,11 +31,14 @@ int main(void)
 	printf("Is %d complete: %d\n", root->n, complete);
 
 	root->left->left->left = binary_tree_node(root->left->left, 8);
+	root->left->left->right = binary_tree_node(root->left->left, 80);
+	root->left->left->left->left = binary_tree_node(root->left->left->left, 800);
 	binary_tree_print(root);
 	complete = binary_tree_is_complete(root);
 	printf("Is %d complete: %d\n", root->n, complete);
 
 	root->left->right->left = binary_tree_node(root->left->right, 23);
+	root->left->right->right = binary_tree_node(root->left->right, 32);
 	binary_tree_print(root);
 	complete = binary_tree_is_complete(root);
 	printf("Is %d complete: %d\n", root->n, complete);
