@@ -1,60 +1,37 @@
-#include <stddef.h>
 #include "binary_trees.h"
-size_t binary_tree_height(const binary_tree_t *tree);
 /**
- * binary_tree_balance - Measures the balance factor of a binary tree
- * @tree: Pointer to the root node of the tree
- *
- * Return: Balance factor of the tree, 0 if tree is NULL
+ * binary_tree_balance - measures the balance factor of a binary tree
+ * @tree: the tree
+ * Return: balance factor or 0
  */
 int binary_tree_balance(const binary_tree_t *tree)
 {
-	int left_height = 0, right_height = 0;
+	int lefth, righth;
 
-	if (tree == NULL || (tree->left == NULL && tree->right == NULL))
+	if (tree == NULL)
+	{
 		return (0);
-
-	if (tree->left != NULL)
-		left_height = binary_tree_height(tree->left);
-
-	if (tree->right != NULL)
-		right_height = binary_tree_height(tree->right);
-	 /*printf("Left Height is %d\n", left_height);*/
-	 /*printf("Right Height is %d\n", right_height);*/
-	return (left_height - right_height);
+	}
+	lefth = l_height(tree->left);
+	righth = l_height(tree->right);
+	return (lefth - righth);
 }
 
-/**
- * binary_tree_height - Measures the height of a binary tree
- * @tree: Pointer to the root node of the tree to measure the height.
- *
- * Return: Height of the tree, 0 if tree is NULL
- */
-size_t binary_tree_height(const binary_tree_t *tree)
-{
-	size_t left_height, right_height, tree_height;
 
-	/* Base case: if tree is NULL, return 0 */
+/**
+ * l_height - measures the height of a tree
+ * @tree: the tree
+ * Return: Height or NULL
+ */
+size_t l_height(const binary_tree_t *tree)
+{
+	size_t left_height, right_height;
+
 	if (tree == NULL)
 		return (0);
 
-	/* Recursive case: calculate the height of the left subtree */
-	if (tree != NULL)
-		left_height = 1 + binary_tree_height(tree->left);
-	else
-		left_height = 0;
+	left_height = l_height(tree->left);
+	right_height = l_height(tree->right);
 
-	/* Recursive case: calculate the height of the right subtree */
-	if (tree != NULL)
-		right_height = 1 + binary_tree_height(tree->right);
-	else
-		right_height = 0;
-
-	/* Determine the maximum height between left and right subtrees */
-	if (left_height > right_height)
-		tree_height = left_height;
-	else
-		tree_height = right_height;
-
-	return (tree_height);
+	return (left_height > right_height ? left_height + 1 : right_height + 1);
 }
