@@ -1,36 +1,4 @@
 #include "binary_trees.h"
-/**
- * is_bst_util - Helper function to check if a binary tree is a valid BST
- * @tree: Pointer to the root node of the tree
- * @min: Minimum value allowed for nodes in the subtree
- * @max: Maximum value allowed for nodes in the subtree
- *
- * Return: 1 if the subtree rooted at 'tree' is a valid BST, 0 otherwise
- */
-int is_bst_util(const binary_tree_t *tree, int min, int max)
-{
-	if (tree == NULL)
-		return (1);
-
-	if (tree->n <= min || tree->n >= max)
-		return (0);
-
-	return (is_bst_util(tree->left, min, tree->n) &&
-			is_bst_util(tree->right, tree->n, max));
-}
-
-/**
- * binary_tree_is_bst - Check if a binary tree is a valid BST
- * @tree: Pointer to the root node of the tree to check
- *
- * Return: 1 if tree is a valid BST, 0 otherwise
- */
-int binary_tree_is_bst(const binary_tree_t *tree)
-{
-	if (tree == NULL)
-		return (0);
-	return (is_bst_util(tree, INT_MIN, INT_MAX));
-}
 
 /**
  * binary_tree_balance - measures the balance factor of a binary tree
@@ -68,6 +36,26 @@ size_t l_height(const binary_tree_t *tree)
 
 	return (left_height > right_height ? left_height + 1 : right_height + 1);
 }
+
+/**
+ * binary_tree_is_balanced - checks if a binary tree is balance
+ * @tree: Pointer to the root node of the tree
+ * Return: 1 if tree is balanced, 0 otherwise
+ */
+int binary_tree_is_balanced(const binary_tree_t *tree)
+{
+	int balance;
+
+	if (tree == NULL)
+		return (1);
+
+	balance = l_height(tree);
+	if (balance < -1 || balance > 1)
+		return (0);
+
+	return (binary_tree_is_balanced(tree->left) &&
+		binary_tree_is_balanced(tree->right));
+}
 /**
  * binary_tree_is_avl - checks if a binary tree is a valid AVL Tree
  * @tree: tree
@@ -75,13 +63,12 @@ size_t l_height(const binary_tree_t *tree)
  */
 int binary_tree_is_avl(const binary_tree_t *tree)
 {
-	if (tree)
-	{
-		if (binary_tree_is_bst(tree) && (binary_tree_balance(tree) >= -1 &&
-					binary_tree_balance(tree) <= 1))
-			return (binary_tree_is_avl(tree->left) &&
-					binary_tree_is_avl(tree->right));
+	if (!tree)
 		return (0);
+	if (binary_tree_is_bst(tree) && binary_tree_is_balanced(tree))
+	{
+		return (1);
 	}
-	return (1);
+	else
+		return (0);
 }
