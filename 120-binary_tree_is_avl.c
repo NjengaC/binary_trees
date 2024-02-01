@@ -29,8 +29,6 @@ int binary_tree_is_bst(const binary_tree_t *tree)
 {
 	if (tree == NULL)
 		return (0);
-
-
 	return (is_bst_util(tree, INT_MIN, INT_MAX));
 }
 
@@ -79,11 +77,11 @@ int binary_tree_is_avl(const binary_tree_t *tree)
 {
 	if (tree)
 	{
-	if (binary_tree_is_bst(tree) && (binary_tree_balance(tree) >= -1 &&
-	    binary_tree_balance(tree) <= 1))
-		return (binary_tree_is_avl(tree->left) &&
-			binary_tree_is_avl(tree->right));
-	return (0);
+		if (binary_tree_is_bst(tree) && (binary_tree_balance(tree) >= -1 &&
+					binary_tree_balance(tree) <= 1))
+			return (binary_tree_is_avl(tree->left) &&
+					binary_tree_is_avl(tree->right));
+		return (0);
 	}
 	return (1);
 }
