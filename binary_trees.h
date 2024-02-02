@@ -67,4 +67,5 @@ size_t binary_tree_size(const binary_tree_t *tree);
 int is_complete_util(const binary_tree_t *tree, size_t index, size_t size);
 int is_bst_util(const binary_tree_t *tree, int min, int max);
 int binary_tree_is_bst(const binary_tree_t *tree);
+avl_t *array_to_avl(int *array, size_t size);
 #endif /* _BINARY_TREES_H_ */

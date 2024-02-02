@@ -1,5 +1,5 @@
 #include "binary_trees.h"
-void balance(binary_tree_t *tree);
+void balance(binary_tree_t **tree);
 bst_t *search(bst_t *tree, int value);
 bst_t *bst_insert(bst_t **tree, int value);
 
@@ -26,16 +26,31 @@ avl_t *avl_insert(avl_t **tree, int value)
 	parent = search(*tree, value);
 
 	if (parent)
+	{
+		if (value < parent->n)
+		{
+			if (parent->left != NULL)
+				parent = search(parent->left, value);
+		}
+		else
+		{
+			if (parent->right != NULL)
+				parent = search(parent->right, value);
+		}
 		new_node = binary_tree_node(parent, value);
+	}
 	else
+	{
 		return (NULL);
+	}
 
 	if (value < parent->n)
 		parent->left = new_node;
 	else
 		parent->right = new_node;
 
-	balance(*tree);
+
+	balance(tree);
 
 	return (new_node);
 }
@@ -44,38 +59,37 @@ avl_t *avl_insert(avl_t **tree, int value)
  * @tree: pointer to root of tree
  * Return: nothing
  */
-void balance(binary_tree_t *tree)
+void balance(binary_tree_t **tree)
 {
 	int balance_val;
 
-	if (!tree)
+	if (!tree || !(*tree))
 		return;
 
-	balance_val = binary_tree_balance(tree);
+	balance_val = binary_tree_balance(*tree);
 
 	if (balance_val < -1)
 	{
-		if (binary_tree_balance(tree->right) > 0)
-			tree->right = binary_tree_rotate_right(tree->right);
-		tree = binary_tree_rotate_left(tree);
-		if (tree->parent && tree->parent->left == tree)
-			tree->parent->left = tree;
-		else if (tree->parent && tree->parent->right == tree)
-			tree->parent->right = tree;
+		if (binary_tree_balance((*tree)->right) > 0)
+			(*tree)->right = binary_tree_rotate_right((*tree)->right);
+		*tree = binary_tree_rotate_left(*tree);
 	}
 	else if (balance_val > 1)
 	{
-		if (binary_tree_balance(tree->left) < 0)
-			tree->left = binary_tree_rotate_left(tree->left);
-		tree = binary_tree_rotate_right(tree);
-		if (tree->parent && tree->parent->left == tree)
-			tree->parent->left = tree;
-		else if (tree->parent && tree->parent->right == tree)
-			tree->parent->right = tree;
+		if (binary_tree_balance((*tree)->left) < 0)
+			(*tree)->left = binary_tree_rotate_left((*tree)->left);
+		*tree = binary_tree_rotate_right(*tree);
+	}
+	if ((*tree)->parent)
+	{
+		if ((*tree)->parent->left == *tree)
+			(*tree)->parent->left = *tree;
+		else if ((*tree)->parent->right == *tree)
+			(*tree)->parent->right = *tree;
 	}
 
-	if (tree->parent)
-		balance(tree->parent);
+	if ((*tree)->parent)
+		balance(&((*tree)->parent));
 }
 
 /**
