@@ -35,7 +35,7 @@ avl_t *avl_insert(avl_t **tree, int value)
 	else
 		parent->right = new_node;
 
-	balance(new_node->parent);
+	balance(*tree);
 
 	return (new_node);
 }
@@ -50,6 +50,7 @@ void balance(binary_tree_t *tree)
 
 	if (!tree)
 		return;
+
 	balance_val = binary_tree_balance(tree);
 
 	if (balance_val < -1)
@@ -57,16 +58,26 @@ void balance(binary_tree_t *tree)
 		if (binary_tree_balance(tree->right) > 0)
 			tree->right = binary_tree_rotate_right(tree->right);
 		tree = binary_tree_rotate_left(tree);
+		if (tree->parent && tree->parent->left == tree)
+			tree->parent->left = tree;
+		else if (tree->parent && tree->parent->right == tree)
+			tree->parent->right = tree;
 	}
 	else if (balance_val > 1)
 	{
 		if (binary_tree_balance(tree->left) < 0)
 			tree->left = binary_tree_rotate_left(tree->left);
 		tree = binary_tree_rotate_right(tree);
+		if (tree->parent && tree->parent->left == tree)
+			tree->parent->left = tree;
+		else if (tree->parent && tree->parent->right == tree)
+			tree->parent->right = tree;
 	}
-	if ((tree)->parent)
+
+	if (tree->parent)
 		balance(tree->parent);
 }
+
 /**
  * search - searches tree
  * @tree: pointer to root
