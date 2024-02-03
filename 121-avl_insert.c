@@ -80,13 +80,12 @@ void balance(binary_tree_t **tree)
 			(*tree)->left = binary_tree_rotate_left((*tree)->left);
 		*tree = binary_tree_rotate_right(*tree);
 	}
-	if ((*tree)->parent)
-	{
-		if ((*tree)->parent->left == *tree)
-			(*tree)->parent->left = *tree;
-		else if ((*tree)->parent->right == *tree)
-			(*tree)->parent->right = *tree;
-	}
+
+	if (abs(binary_tree_balance((*tree)->left)) > 1)
+		balance(&((*tree)->left));
+
+	if (abs(binary_tree_balance((*tree)->right)) > 1)
+		balance(&((*tree)->right));
 
 	if ((*tree)->parent)
 		balance(&((*tree)->parent));
